@@ -14,7 +14,12 @@ export const CalculatorScreen = () => {
     <View style={styles.calculatorContainer}>
 
         <View style={{ paddingHorizontal: 30, paddingBottom: 20 }}>
-        <Text style={styles.mainResult}>{ number }</Text>
+        <Text 
+            adjustsFontSizeToFit
+            numberOfLines={1}
+            style={styles.mainResult}>{ number }
+
+        </Text>
         <Text style={styles.subResult}>15</Text>
         </View>
 
