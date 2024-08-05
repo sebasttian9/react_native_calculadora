@@ -10,7 +10,9 @@ export const CalculatorScreen = () => {
     const { number, prevNumber, builNumber, clean, deleteOperation, toggleSing, divideOperation,
         addOperation,
         subtracOperation,
-        multiplyOperation  } = useCalculator();
+        multiplyOperation,
+        CalculateResult,
+        formula  } = useCalculator();
 
 
   return (
@@ -20,13 +22,13 @@ export const CalculatorScreen = () => {
         <Text 
             adjustsFontSizeToFit
             numberOfLines={1}
-            style={styles.mainResult}>{ number }
+            style={styles.mainResult}>{ formula }
 
         </Text>
         <Text
             adjustsFontSizeToFit
             numberOfLines={1}
-            style={styles.subResult}>{ prevNumber}</Text>
+            style={styles.subResult}>{ (prevNumber==0) ? ' ' : prevNumber }</Text>
         </View>
 
         <View style={styles.row}>
@@ -70,7 +72,7 @@ export const CalculatorScreen = () => {
 
             <CalculatorButton onPress = { ()=> builNumber('0') } label="0" width={150}/>
             <CalculatorButton onPress = { ()=> builNumber('.') } label="." />            
-            <CalculatorButton onPress = { ()=> console.log('=') } label="=" color={colors.orange}/>
+            <CalculatorButton onPress = { CalculateResult } label="=" color={colors.orange}/>
 
         </View>
         

@@ -1,23 +1,43 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 
 enum Operator {
-    add,
-    subtract,
-    multiply,
-    divide,
+    add = '+',
+    subtract = '-',
+    multiply = 'x',
+    divide = '÷',
 }
 
 export const useCalculator = () => {
   
+    const [ formula, setFormula ] = useState('');
     const [ number, setNumber ] = useState('0');
     const [ prevNumber, setPrevNumber ] = useState('0');
 
     const lastOperation = useRef<Operator>();
 
+    useEffect(() => {
+
+        if( lastOperation.current ){
+
+            const firstFormulaPart = formula.split(' ').at(0);
+            setFormula(`${ firstFormulaPart} ${ lastOperation.current } ${number}`);
+        }else{
+            setFormula(number);
+        }
+        
+    }, [number]);
+
+
+
+
+
+
     const clean = () => {
 
         setNumber('0');
         setPrevNumber('0');
+        lastOperation.current = undefined;
+        setFormula('');
 
     }
 
@@ -115,6 +135,44 @@ export const useCalculator = () => {
         setLastNumber();
         lastOperation.current = Operator.add;
     }
+
+
+    const CalculateResult = () => {
+
+        const result = calculateSubResult();
+        setFormula(`${result}`);
+
+        lastOperation.current = undefined;
+        setPrevNumber('0');
+
+    }
+
+
+    const calculateSubResult = (): number => {
+
+        const [ firstValue, operation, secondValue] = formula.split(' '); 
+
+        const num1 = Number(firstValue);
+        const num2 = Number(secondValue);
+
+        if(isNaN(num2)) return num1;
+
+        switch( operation ){
+
+            case Operator.add:
+                return num1+num2;
+            case Operator.subtract:
+                return num1-num2;
+            case Operator.multiply:
+                return num1*num2;
+            case Operator.divide:
+                return num1/num2;
+            default:
+                throw new Error("Operacion not implemented");
+            
+
+        }
+    }
   
     return {
 
@@ -128,7 +186,9 @@ export const useCalculator = () => {
     divideOperation,
     addOperation,
     subtracOperation,
-    multiplyOperation
+    multiplyOperation,
+    CalculateResult,
+    formula,
 
 
     // Methods
